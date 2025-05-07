@@ -14,9 +14,9 @@ curl -sO https://packages.wazuh.com/4.11/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.11/config.yml
 
 ##Modification du fichier config.yml
-sed -i '0,/ip: "<indexer-node-ip>"/s//ip: $IP_ADDRESS/' config.yml
-sed -i '0,/ip: "<wazuh-manager-ip>"/s//ip: $IP_ADDRESS/' config.yml
-sed -i '0,/ip: "<dashboard-node-ip>"/s//ip: $IP_ADDRESS/' config.yml
+sed -i '0,/ip: "<indexer-node-ip>"/s//ip: \"$IP_ADDRESS\"/' config.yml
+sed -i '0,/ip: "<wazuh-manager-ip>"/s//ip:  \"$IP_ADDRESS\"/' config.yml
+sed -i '0,/ip: "<dashboard-node-ip>"/s//ip:  \"$IP_ADDRESS\"/' config.yml
 
 bash ./wazuh-certs-tool.sh -A
 tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ .
@@ -25,7 +25,7 @@ rm -rf ./wazuh-certificates
 sudo apt install wazuh-indexer wazuh-manager wazuh-dashboard -y
 
 ##Modification du fichier /etc/wazuh-indexer/opensearch.yml
-sed -i '0,/network.host: 0.0.0.0/s//network.host: $IP_ADDRESS/' /etc/wazuh-indexer/opensearch.yml
+sed -i '0,/network.host: 0.0.0.0/s//network.host:  \"$IP_ADDRESS\"/' /etc/wazuh-indexer/opensearch.yml
 
 
 ./deploy-cert-indexer.sh
@@ -45,7 +45,7 @@ apt install filebeat #Installation du paquet filebeat
 curl -so /etc/filebeat/filebeat.yml https://packages.wazuh.com/4.7/tpl/wazuh/filebeat/filebeat.yml #Téléchargement du fichier de confuguration filebeat
 
 ##Modification du fichier /etc/filebeat/filebeat.yml
-sed -i '0,/hosts: ["127.0.0.1:9200"]/s//hosts: ["$IP_ADDRESS:9200"]/' /etc/filebeat/filebeat.yml
+sed -i '0,/hosts: \[\"127.0.0.1:9200\"\]/s//hosts: [" \"$IP_ADDRESS\":9200"]/' /etc/filebeat/filebeat.yml
 
 filebeat keystore create #Création du fichier Keystore
 
@@ -64,7 +64,7 @@ systemctl enable filebeat
 systemctl start filebeat
 
 ##Modification du fichier /etc/wazuh-dashboard/opensearch_dashboards.yml
-sed -i '0,/opensearch.hosts: https://0.0.0.0:9200/s//opensearch.hosts: https://$IP_ADDRESS:9200/' /etc/wazuh-dashboard/opensearch_dashboard.yml
+sed -i '0,/opensearch.hosts: https://0.0.0.0:9200/s//opensearch.hosts: https:// \"$IP_ADDRESS\":9200/' /etc/wazuh-dashboard/opensearch_dashboard.yml
 
 ./deploy-cert-dashboard.sh
 
