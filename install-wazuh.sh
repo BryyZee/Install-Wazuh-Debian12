@@ -15,9 +15,9 @@ curl -sO https://packages.wazuh.com/4.11/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.11/config.yml
 
 ##Modification du fichier config.yml
-sed -i "0,/ip: "<indexer-node-ip>"/s//ip: \"$IP_ADDRESS\"/" config.yml
-sed -i "0,/ip: "<wazuh-manager-ip>"/s//ip:  \"$IP_ADDRESS\"/" config.yml
-sed -i "0,/ip: "<dashboard-node-ip>"/s//ip:  \"$IP_ADDRESS\"/" config.yml
+sed -i "0,/ip: \"<indexer-node-ip>\"/s//ip: \"$IP_ADDRESS\"/" config.yml
+sed -i "0,/ip: \"<wazuh-manager-ip>\"/s//ip:  \"$IP_ADDRESS\"/" config.yml
+sed -i "0,/ip: \"<dashboard-node-ip>\"/s//ip:  \"$IP_ADDRESS\"/" config.yml
 
 bash ./wazuh-certs-tool.sh -A
 tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ .
