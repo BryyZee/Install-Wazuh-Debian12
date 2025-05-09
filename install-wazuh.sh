@@ -3,8 +3,8 @@
 IP_ADDRESS=$(ip -4 addr show scope global | grep inet | awk '{print $2}' | cut -d'/' -f1 | head -n 1)
 source_pwd=$(pwd)
 
-mkdir -p ~/Wazuh
-cd ~/Wazuh
+mkdir -p /opt/Wazuh
+cd /opt/Wazuh
 
 curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
 echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
@@ -64,7 +64,7 @@ systemctl enable filebeat
 systemctl start filebeat
 
 ##Modification du fichier /etc/wazuh-dashboard/opensearch_dashboards.yml
-sed -i "0,/opensearch.hosts: https://0.0.0.0:9200/s//opensearch.hosts: https://$IP_ADDRESS:9200/" /etc/wazuh-dashboard/opensearch_dashboard.yml
+sed -i "0,/opensearch.hosts: https:\/\/localhost:9200/s//opensearch.hosts: https:\/\/$IP_ADDRESS:9200/" /etc/wazuh-dashboard/opensearch_dashboards.yml
 
 $source_pwd/deploy-cert-dashboard.sh
 
