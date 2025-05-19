@@ -6,10 +6,12 @@ source_pwd=$(pwd)
 mkdir -p /opt/Wazuh
 cd /opt/Wazuh
 
+apt update && apt install curl gpg wget tar
+
 curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/wazuh.gpg --import && chmod 644 /usr/share/keyrings/wazuh.gpg
 echo "deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main" | tee -a /etc/apt/sources.list.d/wazuh.list
 
-sudo apt update && sudo apt upgrade -y && sudo apt-get install debconf adduser procps curl gnupg apt-transport-https filebeat debhelper libcap2-bin -y
+apt update && sudo apt upgrade -y && sudo apt-get install debconf adduser procps curl gnupg apt-transport-https filebeat debhelper libcap2-bin -y
 
 curl -sO https://packages.wazuh.com/4.11/wazuh-certs-tool.sh
 curl -sO https://packages.wazuh.com/4.11/config.yml
@@ -23,10 +25,10 @@ bash ./wazuh-certs-tool.sh -A
 tar -cvf ./wazuh-certificates.tar -C ./wazuh-certificates/ .
 rm -rf ./wazuh-certificates
 
-sudo apt install wazuh-indexer wazuh-manager wazuh-dashboard -y
+apt install wazuh-indexer wazuh-manager wazuh-dashboard -y
 
 ##Modification du fichier /etc/wazuh-indexer/opensearch.yml
-sed -i "0,/network.host: 0.0.0.0/s//network.host:  \"$IP_ADDRESS\"/" /etc/wazuh-indexer/opensearch.yml
+sed -i "0,/network.host: \"0.0.0.0\"/s//network.host:  \"$IP_ADDRESS\"/" /etc/wazuh-indexer/opensearch.yml
 
 
 $source_pwd/deploy-cert-indexer.sh
